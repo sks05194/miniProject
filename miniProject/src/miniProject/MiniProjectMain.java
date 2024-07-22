@@ -2,13 +2,6 @@ package miniProject;
 
 import java.sql.SQLException;
 
-/*
- * 변경사항 2024-07-22 10:55
- * AdminVO			기타생성자 aps = false
- * MiniProjectMain	주석 일부와 바뀐 함수명
- * StudentDAO		시험, 점수 확인 기능 추가 및 개선
- */
-
 public class MiniProjectMain {
 	public static void main(String[] args) {
 		int menuNum = 0;

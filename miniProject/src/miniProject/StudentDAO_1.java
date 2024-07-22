@@ -5,12 +5,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class StudentDAO {
+public class StudentDAO_1 {
 	/** 로그인 관련 메세지 출력 및 관련 메소드 호출 */
 	public StudentVO loginStudent() {
 		System.out.println("학생 로그인 메뉴");
 
-		System.out.print("아이디 입력>>");
+		System.out.print("아이디 입력");
 		String sid = ConnManager.getScanner().next();
 
 		// TODO 아이디 제약조건. 추후 보충하거나 메소드로 뺄 것.
@@ -80,20 +80,16 @@ public class StudentDAO {
 		// TODO 일시적으로 2024년 1학기로 설정하였습니다.
 		// 추후 년도나 학기는 변경해주세요.
 		ArrayList<TestVO> testList = testList(2024, 1); // 2024년도 1학기 시험 문제 리스트
-		if (testList.size() == 0) {
-			System.out.println("해당 년도의 학기에 해당하는 문제가 존재하지 않습니다.");
-			return;
-		}
 		int[] correctArr = new int[testList.size()]; // 문제에 따른 답을 담는 배열
 
 		// 문제 풀기
-		// XXX 이 부분 메소드로 만들지 고민해볼것.
+		// TODO 이 부분 메소드로 만들지 고민해볼것.
 		for (int testNo = 0; testNo < testList.size(); testNo++) {
 			// 문제 출력
 			int no = testList.get(testNo).getTn();
 			String question = testList.get(testNo).getTq();
 
-			System.out.println(no + "번. " + question);
+			System.out.println(no + question);
 
 			// 문제 번호에 따라 점수 correctArr에 반영
 			System.out.print("답안 입력(번호로 입력해주세요)>> ");
@@ -124,7 +120,7 @@ public class StudentDAO {
 				int no = testList.get(testNo).getTn();
 				String question = testList.get(testNo).getTq();
 
-				System.out.println(no + "번. " + question);
+				System.out.println(no + question);
 
 				// 문제 번호에 따라 점수 correctArr에 반영
 				System.out.print("답안 입력(번호로 입력해주세요)>> ");
@@ -145,11 +141,12 @@ public class StudentDAO {
 
 		PreparedStatement ps = ConnManager.getConnection().prepareStatement(sql);
 		ps.setInt(1, student.getSno());
-		ps.setInt(2, 2024);
+		ps.setInt(2, 2024); // 추후 변경 가능성 높음
 		ps.setInt(3, 1);
-
+		
 		ResultSet rs = ps.executeQuery();
 
+		// TODO close 위로 올리기
 		if (rs.next()) {
 			rs.close();
 			return true;
@@ -286,16 +283,12 @@ public class StudentDAO {
 		try {
 //				System.out.println("DB 연결 성공");
 			System.out.println("회원 가입 메뉴");
-			while (true) {
-				System.out.println("학번 입력 >>");
-				if (ConnManager.getScanner().hasNextInt()) {
-					sno = ConnManager.getScanner().nextInt();
-					break;
-				} else {
-					System.out.println("숫자만 입력할 수 있습니다.");
-					ConnManager.getScanner().next();
-					// XXX 아마 이렇게 되신다면 오류가 발생할 수 있습니다.
-				}
+			System.out.println("학번 입력 >>");
+			if (ConnManager.getScanner().hasNextInt()) {
+				sno = ConnManager.getScanner().nextInt();
+			} else {
+				System.out.println("숫자만 입력할 수 있습니다.");
+				ConnManager.getScanner().next();
 			}
 //				System.out.println(sno);
 
@@ -319,7 +312,6 @@ public class StudentDAO {
 	public void joinStudent(String sid, String spw, int sno, String snm) {
 		String sql = "update student set sid = ?, spw = ?, slms = 'Y' where sno = ? and snm = ? and slms = 'N'";
 		PreparedStatement ps = null;
-		
 		try {
 			ps = ConnManager.getConnection().prepareStatement(sql);
 			ps.setString(1, sid);
@@ -334,12 +326,8 @@ public class StudentDAO {
 				System.out.println("회원 가입이 실패하였습니다.\n" + "사유: 없는 학번이거나 중복 아이디");
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				ps.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 		}
+
 	}
+
 }
