@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 
 public class StudentDAO {
 	/** 로그인 관련 메세지 출력 및 관련 메소드 호출 */
@@ -96,15 +97,33 @@ public class StudentDAO {
 			System.out.println(no + "번. " + question);
 
 			// 문제 번호에 따라 점수 correctArr에 반영
-			System.out.print("답안 입력(번호로 입력해주세요)>> ");
-			correctArr[testNo] = ConnManager.getScanner().nextInt();
+			while (true) {
+				System.out.print("답안 입력(번호로 입력해주세요)>> ");
+				try {
+					correctArr[testNo] = ConnManager.getScanner().nextInt();
+					break;
+				} catch (InputMismatchException e) {
+					System.out.println("숫자만 입력해주세요.");
+					ConnManager.getScanner().nextLine();
+					continue;
+				}
+			}
 		}
 
 		// 문제 번호 변경하고 싶은 경우
 		while (true) {
-			System.out.println("선택 : 1.시험종료  2.답안수정");
-			int choice = ConnManager.getScanner().nextInt();
-
+			int choice = 0;
+			while (true) {
+				System.out.println("선택 : 1.시험종료  2.답안수정");
+				try {
+					choice = ConnManager.getScanner().nextInt();
+					break;
+				} catch (InputMismatchException e) {
+					System.out.println("숫자만 입력해주세요.");
+					ConnManager.getScanner().nextLine();
+					continue;
+				}
+			}
 			if (choice == 1)
 				break;
 			else if (choice != 2) {
@@ -113,8 +132,16 @@ public class StudentDAO {
 			}
 
 			System.out.print("수정할 문제 번호 입력>>");
-			choice = ConnManager.getScanner().nextInt();
-
+			while (true) {
+				try {
+					choice = ConnManager.getScanner().nextInt();
+					break;
+				} catch (InputMismatchException e) {
+					System.out.println("숫자만 입력해주세요.");
+					ConnManager.getScanner().nextLine();
+					continue;
+				}
+			}
 			// 수정할 문제 찾고 번호 고치기
 			for (int testNo = 0; testNo < testList.size(); testNo++) {
 				if (choice != testList.get(testNo).getTn())
@@ -128,7 +155,16 @@ public class StudentDAO {
 
 				// 문제 번호에 따라 점수 correctArr에 반영
 				System.out.print("답안 입력(번호로 입력해주세요)>> ");
-				correctArr[testNo] = ConnManager.getScanner().nextInt();
+				while (true) {
+					try {
+						correctArr[testNo] = ConnManager.getScanner().nextInt();
+						break;
+					} catch (InputMismatchException e) {
+						System.out.println("숫자만 입력해주세요.");
+						ConnManager.getScanner().nextLine();
+						continue;
+					}
+				}
 				break;
 			}
 		}
@@ -221,10 +257,29 @@ public class StudentDAO {
 	public void checkPoint(StudentVO student) {
 		System.out.println("확인하고 싶은 년도와 학기를 입력하세요.");
 		System.out.print("년도입력(예: 2024) >>");
-		int year = ConnManager.getScanner().nextInt();
-
+		int year = 0;
+		while (true) {
+			try {
+				year = ConnManager.getScanner().nextInt();
+				break;
+			} catch (InputMismatchException e) {
+				System.out.println("숫자만 입력해주세요.");
+				ConnManager.getScanner().nextLine();
+				continue;
+			}
+		}
 		System.out.print("학기 선택(숫자로입력): 1.1학기 2.2학기 >>");
-		int semester = ConnManager.getScanner().nextInt();
+		int semester = 0;
+		while (true) {
+			try {
+				semester = ConnManager.getScanner().nextInt();
+				break;
+			} catch (InputMismatchException e) {
+				System.out.println("숫자만 입력해주세요.");
+				ConnManager.getScanner().nextLine();
+				continue;
+			}
+		}
 		if (semester != 1 && semester != 2) {
 			System.out.println("존재하지 않는 접근입니다.");
 			return;
@@ -319,7 +374,7 @@ public class StudentDAO {
 	public void joinStudent(String sid, String spw, int sno, String snm) {
 		String sql = "update student set sid = ?, spw = ?, slms = 'Y' where sno = ? and snm = ? and slms = 'N'";
 		PreparedStatement ps = null;
-		
+
 		try {
 			ps = ConnManager.getConnection().prepareStatement(sql);
 			ps.setString(1, sid);

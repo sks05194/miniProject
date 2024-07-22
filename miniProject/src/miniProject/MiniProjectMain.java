@@ -1,22 +1,35 @@
 package miniProject;
 
 import java.sql.SQLException;
+import java.util.InputMismatchException;
 
 public class MiniProjectMain {
 	public static void main(String[] args) {
 		int menuNum = 0;
-		AdminDAO adminDAO = new AdminDAO(); 
+		AdminDAO adminDAO = new AdminDAO();
 		StudentDAO studentDAO = new StudentDAO();
 
 		while (true) {
 			System.out.println("메뉴선택:  1.관리자  2.학생   3.시스템종료");
-			menuNum = ConnManager.getScanner().nextInt();
+			try {
+				menuNum = ConnManager.getScanner().nextInt();
+			} catch (InputMismatchException e1) {
+				System.out.println("숫자만 입력해주세요.");
+				ConnManager.getScanner().nextLine();
+				continue;
+			}
 			switch (menuNum) {
 
 			case 1: // 관리자
 				System.out.println("관리자 메뉴 시작");
 				System.out.println("메뉴선택: 1. 관리자 로그인  2. 관리자 가입  3.홈으로");
-				menuNum = ConnManager.getScanner().nextInt();
+				try {
+					menuNum = ConnManager.getScanner().nextInt();
+				} catch (InputMismatchException e1) {
+					System.out.println("숫자만 입력해주세요.");
+					ConnManager.getScanner().nextLine();
+					continue;
+				}
 
 				switch (menuNum) {
 				case 1: // 관리자 로그인
@@ -35,9 +48,15 @@ public class MiniProjectMain {
 
 						admin: while (true) {
 							System.out.println("관리자메뉴 선택: 1.학생등록 2.학생출력 3.관리자출력 4.상태변경  5.역할변경  6.로그아웃");
-							menuNum = ConnManager.getScanner().nextInt();
-							
-							switch(menuNum) {
+							try {
+								menuNum = ConnManager.getScanner().nextInt();
+							} catch (InputMismatchException e1) {
+								System.out.println("숫자만 입력해주세요.");
+								ConnManager.getScanner().nextLine();
+								continue;
+							}
+
+							switch (menuNum) {
 							case 1:
 								// TODO 학생등록 기능
 								break;
@@ -54,7 +73,9 @@ public class MiniProjectMain {
 								adminDAO.changeArole(admin);
 								break;
 							case 6:
+								break;
 							default:
+								System.out.println("잘못된 접근입니다.");
 								break admin;
 							}
 						}
@@ -69,16 +90,23 @@ public class MiniProjectMain {
 
 					break;
 
-//				case 3: // 홈으로
-//					break;
-//				default:
+				case 3: // 홈으로
+					break;
+				default:
+					System.out.println("잘못된 접근입니다.");
 				}
 				break; // 관리자 종료
 
 			case 2: // 학생
 				System.out.println("학생 메뉴 시작");
 				System.out.println("메뉴선택: 1.로그인  2.회원가입  3.홈으로");
-				menuNum = ConnManager.getScanner().nextInt();
+				try {
+					menuNum = ConnManager.getScanner().nextInt();
+				} catch (InputMismatchException e1) {
+					System.out.println("숫자만 입력해주세요.");
+					ConnManager.getScanner().nextLine();
+					continue;
+				}
 
 				switch (menuNum) {
 				case 1: // 로그인
@@ -94,7 +122,13 @@ public class MiniProjectMain {
 					// 학생 메뉴
 					student: while (true) {
 						System.out.println("학생 메뉴 선택: 1.시험응시 2.점수확인  3.로그아웃");
-						menuNum = ConnManager.getScanner().nextInt();
+						try {
+							menuNum = ConnManager.getScanner().nextInt();
+						} catch (InputMismatchException e1) {
+							System.out.println("숫자만 입력해주세요.");
+							ConnManager.getScanner().nextLine();
+							continue;
+						}
 
 						switch (menuNum) {
 						case 1: // 시험응시
@@ -120,9 +154,10 @@ public class MiniProjectMain {
 					studentDAO.joinStudent();
 					break;
 
-//				case 3: // 홈으로
-//					break;
-//				default:
+				case 3: // 홈으로
+					break;
+				default:
+					System.out.println("잘못 입력하셨습니다.");
 				}
 
 				break; // 학생 종료
@@ -135,8 +170,6 @@ public class MiniProjectMain {
 			default:
 				// FIXME 추후 프로그램을 보고 출력문을 변경해주시길 바랍니다.
 				System.out.println("허용되지 않은 접근입니다.");
-				ConnManager.CloseConnection();
-				break;
 			}
 		}
 	}
