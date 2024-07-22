@@ -3,7 +3,7 @@ package miniProject;
 import java.sql.SQLException;
 import java.util.InputMismatchException;
 
-public class MiniProjectMain {
+public class MiniProjectMain1 {
 	public static void main(String[] args) {
 		int menuNum = 0;
 		AdminDAO adminDAO = new AdminDAO();
@@ -34,46 +34,48 @@ public class MiniProjectMain {
 				switch (menuNum) {
 				case 1: // 관리자 로그인
 					AdminVO admin = adminDAO.login();
-
-					if (admin == null) {
-						System.out.println("관리자가 아닙니다.");
-						break;
-					}
-
-					// 관리자 메뉴
-					System.out.println(admin.getAnm() + "님 환영합니다.");
-
-					admin: while (true) {
-						System.out.println("관리자메뉴 선택: 1.학생등록 2.학생출력 3.관리자출력 4.상태변경  5.역할변경  6.로그아웃");
-						try {
-							menuNum = ConnManager.getScanner().nextInt();
-						} catch (InputMismatchException e1) {
-							System.out.println("숫자만 입력해주세요.");
-							ConnManager.getScanner().nextLine();
-							continue;
+					
+					adminMenu: while (true) {
+						if (admin == null) {
+							System.out.println("관리자가 아닙니다.");
+							break;
 						}
 
-						switch (menuNum) {
-						case 1: // 학생등록 기능
-							adminDAO.regirster();
-							break;
-						case 2: // 학생출력 기능
-							adminDAO.showList();
-							break;
-						case 3: // 관리자출력 기능
-							adminDAO.AshowList();
-							break;
-						case 4: // 상태변경
-							adminDAO.changeAps(admin);
-							break;
-						case 5: // 역할변경
-							adminDAO.changeArole(admin);
-							break;
-						case 6:
-							break;
-						default:
-							System.out.println("잘못된 접근입니다.");
-							break admin;
+						// 관리자 메뉴
+						System.out.println(admin.getAnm() + "님 환영합니다.");
+
+						admin: while (true) {
+							System.out.println("관리자메뉴 선택: 1.학생등록 2.학생출력 3.관리자출력 4.상태변경  5.역할변경  6.로그아웃");
+							try {
+								menuNum = ConnManager.getScanner().nextInt();
+							} catch (InputMismatchException e1) {
+								System.out.println("숫자만 입력해주세요.");
+								ConnManager.getScanner().nextLine();
+								continue;
+							}
+
+							switch (menuNum) {
+							case 1: // 학생등록 기능
+								adminDAO.regirster();
+								break;
+							case 2: // 학생출력 기능
+								adminDAO.showList();
+								break;
+							case 3: // 관리자출력 기능
+								adminDAO.AshowList();
+								break;
+							case 4: // 상태변경
+								adminDAO.changeAps(admin);
+								break;
+							case 5: // 역할변경
+								adminDAO.changeArole(admin);
+								break;
+							case 6:
+								break adminMenu;
+							default:
+								System.out.println("잘못된 접근입니다.");
+								break admin;
+							}
 						}
 					}
 					break;

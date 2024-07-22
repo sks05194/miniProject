@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class AdminDAO {
+public class AdminDAO1 {
 	// 관리자 역할변경
 	public void changeArole(AdminVO adminVO) {
 		String id = null;
@@ -128,10 +128,10 @@ public class AdminDAO {
 
 			pst = ConnManager.getConnection().prepareStatement(sql);
 			rs = pst.executeQuery();
-			System.out.println("학번 \t학생이름 \t 학생아이디 \t 학생 입학일자 \t 가입여부");
+			System.out.println("\t 학번 \t학생이름 \t 학생아이디 \t 학생 입학일자 \t 가입여부");
 
 			while (rs.next()) {
-				System.out.println(rs.getInt("sno") + "\t" + rs.getString("snm") + "\t" + rs.getString("sid")
+				System.out.println("\t" + rs.getInt("sno") + "\t" + rs.getString("snm") + "\t" + rs.getString("sid")
 						+ "\t" + rs.getDate("sdate") + "\t" + rs.getString("slms"));
 			}
 
@@ -193,21 +193,8 @@ public class AdminDAO {
 
 	}
 
-	// 로그인 출력
-	public AdminVO login() {
-		System.out.println("아이디 입력 >> ");
-		String aid = ConnManager.getScanner().next();
-
-		System.out.println("비밀번호 입력 >> ");
-		String apwd = ConnManager.getScanner().next();
-
-		AdminVO admin = login(aid, apwd);
-
-		return admin;
-	}
-
 	// 로그인
-	private AdminVO login(String aid, String apwd) {
+	public AdminVO login(String aid, String apwd) {
 		AdminVO avo = null;
 		Statement st = null;
 		ResultSet rs = null;
@@ -240,45 +227,31 @@ public class AdminDAO {
 		return avo;
 	}
 
-	// 관리자 가입 출력문
-	public void inswerAnMember() {
-		System.out.println("관리자 회원가입 메뉴");
-		System.out.println("아이디 입력 >> ");
-		String aid = ConnManager.getScanner().next();
-
-		System.out.println("비밀번호 입력 >> ");
-		String apwd = ConnManager.getScanner().next();
-
-		System.out.println("이름 입력 >> ");
-		String anm = ConnManager.getScanner().next();
-
-		insertAmMember(aid, apwd, anm);
-	}
-
 	// 관리자 가입 메소드
-	private void insertAmMember(String aid, String apwd, String anm) {
-		String sql = "insert into admin (aid, apwd, anm) values (?, ? ,?)";
+	public int insertAmMember(String aid, String apwd, String anm) {
+		int cnt = 0;
+
 		PreparedStatement ps = null;
+		String sql = "insert into admin (aid, apwd, anm) values (?, ? ,?)";
 		try {
 			ps = ConnManager.getConnection().prepareStatement(sql);
 			ps.setString(1, aid);
 			ps.setString(2, apwd);
 			ps.setString(3, anm);
-			int cnt = ps.executeUpdate();
 
 			if (cnt > 0) {
+
+				cnt = ps.executeUpdate();
 				System.out.println("등록 완료");
 			} else
 				System.out.println("등록 실패");
+
 		} catch (Exception e) {
+
 			e.printStackTrace();
-		}finally {
-			try {
-				ps.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 		}
+
+		return cnt;
 	}
 
 	// 관리자 목록 조회
