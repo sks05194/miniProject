@@ -11,8 +11,17 @@ public class AdminDAO {
 		String id = null;
 		int arole = 0;
 
+		ConnManager.getScanner().nextLine();
+		while (true) {
 		System.out.println("변경할 아이디 입력 >>");
-		id = ConnManager.getScanner().next();
+			id = ConnManager.getScanner().nextLine();
+			id = id.replace(" ", "");
+
+			if (!ConnManager.getInstance().idCheck(id))
+				break;
+
+			System.out.println("아이디 입력 오류");
+		}
 
 		while (true) {
 			System.out.println("변경할 역할 입력(1. SUPER 2.SUB)");
@@ -77,8 +86,17 @@ public class AdminDAO {
 		int aps = 0;
 
 		System.out.println("상태 변경 메뉴");
+		ConnManager.getScanner().nextLine();
+		while (true) {
 		System.out.println("변경할 아이디 입력 >>");
-		id = ConnManager.getScanner().next();
+			id = ConnManager.getScanner().nextLine();
+			id = id.replace(" ", "");
+
+			if (!ConnManager.getInstance().idCheck(id))
+				break;
+
+			System.out.println("아이디 입력 오류");
+		}
 
 		System.out.println("변경할 상태 입력(0. 사용불가 또는 대기 1. 사용가능)");
 		if (ConnManager.getScanner().hasNextInt()) {
@@ -194,15 +212,34 @@ public class AdminDAO {
 
 	// 로그인 출력
 	public AdminVO login() {
+		String aid = null;
+		String apwd = null;
+		System.out.println("관리자 로그인 메뉴");
+
+		ConnManager.getScanner().nextLine();
+		while (true) {
 		System.out.println("아이디 입력 >> ");
-		String aid = ConnManager.getScanner().next();
+			aid = ConnManager.getScanner().nextLine();
+			aid = aid.replace(" ", "");
 
+			if (!ConnManager.getInstance().idCheck(aid))
+				break;
+
+			System.out.println("아이디 입력 오류");
+		}
+
+		while (true) {
 		System.out.println("비밀번호 입력 >> ");
-		String apwd = ConnManager.getScanner().next();
+			apwd = ConnManager.getScanner().next();
+			apwd = apwd.replace(" ", "");
 
-		AdminVO admin = login(aid, apwd);
+			if (!ConnManager.getInstance().passwordCheck(apwd))
+				break;
 
-		return admin;
+			System.out.println("비밀번호 입력 오류");
+		}
+
+		return login(aid, apwd);
 	}
 
 	// 로그인
@@ -240,15 +277,41 @@ public class AdminDAO {
 
 	// 관리자 가입 출력문
 	public void inswerAnMember() {
+		String aid = null;
+		String apwd = null;
+		String anm = null;
 		System.out.println("관리자 회원가입 메뉴");
+
+		ConnManager.getScanner().nextLine();
+		while (true) {
 		System.out.println("아이디 입력 >> ");
-		String aid = ConnManager.getScanner().next();
+			aid = ConnManager.getScanner().nextLine();
+			aid = aid.replace(" ", "");
 
+			if (!ConnManager.getInstance().idCheck(aid))
+				break;
+
+			System.out.println("아이디 입력 오류");
+		}
+
+		while (true) {
 		System.out.println("비밀번호 입력 >> ");
-		String apwd = ConnManager.getScanner().next();
+			apwd = ConnManager.getScanner().nextLine();
+			apwd = apwd.replace(" ", "");
 
+			if (!ConnManager.getInstance().passwordCheck(apwd))
+				break;
+
+			System.out.println("비밀번호 입력 오류");
+		}
+
+		while (true) {
 		System.out.println("이름 입력 >> ");
-		String anm = ConnManager.getScanner().next();
+			anm = ConnManager.getScanner().next();
+			if (!ConnManager.getInstance().nameCheck(anm))
+				break;
+			System.out.println("이름 입력 오류");
+		}
 
 		insertAmMember(aid, apwd, anm);
 	}

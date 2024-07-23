@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 public class ConnManager {
+	private static Instance instance = null;
 	private static Connection con = null;
 	private static Scanner sc = null;
 
@@ -46,6 +47,14 @@ public class ConnManager {
 
 		return sc;
 	}
+
+	public static Instance getInstance() {
+		if (instance == null) {
+			instance = new Instance();
+		}
+		return instance;
+	}
+
 
 	/** Connection 객체를 닫아줍니다. */
 	public static void CloseConnection() {
