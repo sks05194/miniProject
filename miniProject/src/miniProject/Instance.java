@@ -72,4 +72,12 @@ public class Instance {
 		return false;
 	}
 
+	// 학번 제약조건 검사
+	public boolean numCheck(int input) {
+		String numberStr = String.valueOf(input);
+		String check = "\\d{8}";
+
+		return !numberStr.matches(check);
+	}
+
 }

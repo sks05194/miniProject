@@ -20,8 +20,6 @@ public class StudentDAO {
 			sid = ConnManager.getScanner().nextLine();
 			sid = sid.replace(" ", "");
 
-			System.out.println("입력된 sid: " + sid);
-
 			if (!ConnManager.getInstance().idCheck(sid))
 				break;
 
@@ -34,8 +32,6 @@ public class StudentDAO {
 			System.out.print("비번 입력>>");
 			spw = ConnManager.getScanner().nextLine();
 			spw = spw.replace(" ", "");
-
-			System.out.println("입력된 spw: " + spw);
 
 			if (!ConnManager.getInstance().passwordCheck(spw))
 				break;
@@ -354,8 +350,10 @@ public class StudentDAO {
 	// 회원가입 기능
 	public void joinStudent() {
 		int sno = 0;
+		String sid = null;
+		String spw = null;
+		String snm = null;
 		try {
-//				System.out.println("DB 연결 성공");
 			System.out.println("회원 가입 메뉴");
 			while (true) {
 				System.out.println("학번 입력 >>");
@@ -367,17 +365,36 @@ public class StudentDAO {
 					ConnManager.getScanner().next();
 				}
 			}
-//				System.out.println(sno);
-
+			ConnManager.getScanner().nextLine();
+			while (true) {
 			System.out.println("아이디 입력 >>");
-			String sid = ConnManager.getScanner().next();
-			System.out.println(sid);
+				sid = ConnManager.getScanner().nextLine();
+				sid = sid.replace(" ", "");
 
-			System.out.println("비밀번호 입력 >>");
-			String spw = ConnManager.getScanner().next();
+				if (!ConnManager.getInstance().idCheck(sid))
+					break;
 
-			System.out.println("이름 입력 >>");
-			String snm = ConnManager.getScanner().next();
+				System.out.println("아이디 입력 오류");
+			}
+
+			while (true) {
+				System.out.println("비밀번호 입력 >> ");
+				spw = ConnManager.getScanner().nextLine();
+				spw = spw.replace(" ", "");
+
+				if (!ConnManager.getInstance().passwordCheck(spw))
+					break;
+
+				System.out.println("비밀번호 입력 오류");
+			}
+
+			while (true) {
+				System.out.println("이름 입력 >> ");
+				snm = ConnManager.getScanner().next();
+				if (!ConnManager.getInstance().nameCheck(snm))
+					break;
+				System.out.println("이름 입력 오류");
+			}
 
 			joinStudent(sid, spw, sno, snm);
 

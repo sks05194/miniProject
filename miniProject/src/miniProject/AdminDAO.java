@@ -168,13 +168,35 @@ public class AdminDAO {
 
 	// 학생 등록 메소드
 	public void regirster() {
-		System.out.print("학번을 입력해주세요 예 : 202431012\n>> ");
-		int sno = ConnManager.getScanner().nextInt();
+		int sno = 0;
+		String snm = null;
+		ConnManager.getScanner().nextLine();
+		while (true) {
+			System.out.print("학번을 입력해주세요 예 : 20241002\n>> ");
+			if (ConnManager.getScanner().hasNextInt()) {
+				sno = ConnManager.getScanner().nextInt();
+				if (!ConnManager.getInstance().numCheck(sno))
+					break;
+			} else {
+				System.out.println("숫자만 입력할 수 있습니다.");
+				ConnManager.getScanner().next();
+			}
 
+			System.out.println("학번은 8자리 형식으로 입력해주세요.");
+		}
+
+		ConnManager.getScanner().nextLine();
+		while (true) {
 		System.out.print("이름을 입력해주세요: ");
-		String snm = ConnManager.getScanner().next();
+			snm = ConnManager.getScanner().nextLine();
+			snm = snm.replace(" ", "");
+			if (!ConnManager.getInstance().nameCheck(snm))
+				break;
+			System.out.println("이름 입력 오류");
+		}
 
-		System.out.print("입학일자(에: 20240302) >> ");
+		ConnManager.getScanner().nextLine();
+		System.out.print("입학일자(예: 20240302) >> ");
 		String sdate = ConnManager.getScanner().next();
 
 		PreparedStatement pst = null;
