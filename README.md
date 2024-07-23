@@ -1,5 +1,6 @@
 # miniProject
 
+# 0723 1440
 - AdminDAO.login(String, String)
     "Y"가 아닌 "O"와 비교하는 코드 수정
     regirster(), getStudent() 메소드 통합
@@ -9,3 +10,8 @@
 
 - StudentDAO
     엄청난 공사
+
+
+# 0723 1600 
+
+- studentDAO의 아이디 비밀번호 체크 메소드 정리
