@@ -3,6 +3,7 @@ package miniProject;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 
@@ -52,8 +53,6 @@ public class StudentDAO {
 			int sno = rs.getInt("sno");
 			String snm = rs.getString("snm");
 			String sdate = rs.getString("sdate");
-			// XXX sdate에서 오류난다면 Date형 컬럼을 받아오는 과정에서 생긴 오류일 확률이 높습니다.
-			// 오류가 발생한다면 쿼리문에서 컬럼을 받아오는 줄을 변경하거나 자료형을 변경해주세요.
 			boolean slms = rs.getString("slms") == "Y";
 
 			rs.close();
@@ -69,8 +68,14 @@ public class StudentDAO {
 	 * @throws main 함수 실행 중 이 메소드에서 오류 발생 시 catch문에서 시험 중단이라고 알려줄거에요.
 	 */
 	public void test(StudentVO student) throws SQLException {
+		LocalDate now = LocalDate.now();
+		int year = now.getYear();
+		int semester = (2 < now.getMonthValue() && now.getMonthValue() < 9) ? 1 : 2;
+
+		System.out.println("현재는 " + year + "년 " + semester + "학기입니다.");
+
 		System.out.println("시험응시 시작");
-		System.out.println("2024년 1학기 JAVA 초급 시험시작"); // TODO 이후 변경 예정
+		System.out.println(year + "년 " + semester + "학기 JAVA 초급 시험시작");
 
 		// 이미 응시한 시험은 다시 보실 수 없습니다. 나가세요.
 		if (checkTestPoint(student)) {
@@ -78,9 +83,8 @@ public class StudentDAO {
 			return;
 		}
 
-		// TODO 일시적으로 2024년 1학기로 설정하였습니다.
-		// 추후 년도나 학기는 변경해주세요.
-		ArrayList<TestVO> testList = testList(2024, 1); // 2024년도 1학기 시험 문제 리스트
+		// 현재 날짜를 기준으로 시험 문제 리스트를 가져옵니다.
+		ArrayList<TestVO> testList = testList(year, semester); // 2024년도 1학기 시험 문제 리스트
 		if (testList.size() == 0) {
 			System.out.println("해당 년도의 학기에 해당하는 문제가 존재하지 않습니다.");
 			return;
@@ -88,7 +92,6 @@ public class StudentDAO {
 		int[] correctArr = new int[testList.size()]; // 문제에 따른 답을 담는 배열
 
 		// 문제 풀기
-		// XXX 이 부분 메소드로 만들지 고민해볼것.
 		for (int testNo = 0; testNo < testList.size(); testNo++) {
 			// 문제 출력
 			int no = testList.get(testNo).getTn();
@@ -349,7 +352,6 @@ public class StudentDAO {
 				} else {
 					System.out.println("숫자만 입력할 수 있습니다.");
 					ConnManager.getScanner().next();
-					// XXX 아마 이렇게 되신다면 오류가 발생할 수 있습니다.
 				}
 			}
 //				System.out.println(sno);

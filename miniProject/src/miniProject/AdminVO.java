@@ -6,7 +6,6 @@ public class AdminVO {
 	private String anm = null; // 이름 not null
 	private String arole = null; // 역할 Check = "super", "sub"
 	private boolean aps = false; // 사용 가능 상태 = 'Y'(true), 'N'(false)
-	// TODO 사용 가능 상태는 where에서 y에 해당하는 정보만 받아올 확률이 높으므로 생략 가능한지 고민해볼것.
 
 	// 로그인
 	public AdminVO(String aid, String apwd, String anm, String arole, boolean aps) {
@@ -72,7 +71,3 @@ public class AdminVO {
 		return "AdminVO [aid=" + aid + ", apwd=" + apwd + ", anm=" + anm + ", arole=" + arole + ", aps=" + aps + "]";
 	}
 }
-
-// TODO 아래 기능을 AdminDAO에 추가해주세요.
-// 관리자 목록 = super만
-// 학생 목록

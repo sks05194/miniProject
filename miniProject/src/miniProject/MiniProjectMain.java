@@ -70,7 +70,7 @@ public class MiniProjectMain {
 							adminDAO.changeArole(admin);
 							break;
 						case 6:
-							break;
+							break admin;
 						default:
 							System.out.println("잘못된 접근입니다.");
 							break admin;
@@ -160,7 +160,6 @@ public class MiniProjectMain {
 				return;
 
 			default:
-				// FIXME 추후 프로그램을 보고 출력문을 변경해주시길 바랍니다.
 				System.out.println("허용되지 않은 접근입니다.");
 			}
 		}
