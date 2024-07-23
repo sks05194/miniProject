@@ -14,12 +14,20 @@ public class AdminDAO {
 		System.out.println("변경할 아이디 입력 >>");
 		id = ConnManager.getScanner().next();
 
-		System.out.println("변경할 역할 입력(1. SUPER 2.SUB)");
-		if (ConnManager.getScanner().hasNextInt()) {
-			arole = ConnManager.getScanner().nextInt();
-		} else {
-			System.out.println("숫자만 입력해주세요.");
-			ConnManager.getScanner().next();
+		while (true) {
+			System.out.println("변경할 역할 입력(1. SUPER 2.SUB)");
+			if (ConnManager.getScanner().hasNextInt()) {
+				arole = ConnManager.getScanner().nextInt();
+
+				if (arole == 1 || arole == 2) {
+					break;
+				} else {
+					System.out.println("1 혹은 2만 입력할 수 있습니다.");
+				}
+			} else {
+				System.out.println("숫자만 입력해주세요.");
+				ConnManager.getScanner().next();
+			}
 		}
 
 //			System.out.println(adminVO.getArole().toString());
@@ -131,8 +139,8 @@ public class AdminDAO {
 			System.out.println("학번 \t학생이름 \t 학생아이디 \t 학생 입학일자 \t 가입여부");
 
 			while (rs.next()) {
-				System.out.println(rs.getInt("sno") + "\t" + rs.getString("snm") + "\t" + rs.getString("sid")
-						+ "\t" + rs.getDate("sdate") + "\t" + rs.getString("slms"));
+				System.out.println(rs.getInt("sno") + "\t" + rs.getString("snm") + "\t" + rs.getString("sid") + "\t"
+						+ rs.getDate("sdate") + "\t" + rs.getString("slms"));
 			}
 
 		} catch (Exception e) {
@@ -140,9 +148,16 @@ public class AdminDAO {
 		}
 	}
 
-	// 등록 메소드
+	// 학생 등록 메소드
 	public void regirster() {
-		StudentVO st = getStudent();
+		System.out.print("학번을 입력해주세요 예 : 202431012\n>> ");
+		int sno = ConnManager.getScanner().nextInt();
+
+		System.out.print("이름을 입력해주세요: ");
+		String snm = ConnManager.getScanner().next();
+
+		System.out.print("입학일자(에: 20240302) >> ");
+		String sdate = ConnManager.getScanner().next();
 
 		PreparedStatement pst = null;
 
@@ -151,9 +166,9 @@ public class AdminDAO {
 
 			pst = ConnManager.getConnection().prepareStatement(sql);
 
-			pst.setInt(1, st.getSno());
-			pst.setString(2, st.getSdate());
-			pst.setString(3, st.getSnm());
+			pst.setInt(1, sno);
+			pst.setString(2, sdate);
+			pst.setString(3, snm);
 
 			int count = pst.executeUpdate();
 
@@ -174,22 +189,6 @@ public class AdminDAO {
 				e.printStackTrace();
 			}
 		}
-
-	}
-
-	// 등록 메소드 학생 전체 목록 출력
-	public static StudentVO getStudent() {
-		System.out.print("학번을 입력해주세요 예 : 202431012");
-		int sno = ConnManager.getScanner().nextInt();
-
-		System.out.print("이름을 입력해주세요:");
-		String snm = ConnManager.getScanner().next();
-
-		System.out.print("입학일자(에: 20240302)");
-		String sdate = ConnManager.getScanner().next();
-
-		StudentVO st = new StudentVO(sno, snm, null, null, sdate, false);
-		return st;
 
 	}
 
@@ -221,8 +220,7 @@ public class AdminDAO {
 
 			if (rs.next())
 				avo = new AdminVO(rs.getString("aid"), rs.getString("apwd"), rs.getString("anm"), rs.getString("arole"),
-						rs.getString("aps").equals("O"));
-
+						rs.getString("aps").equals("Y"));
 		} catch (SQLException e) {
 
 			e.printStackTrace();
@@ -272,7 +270,7 @@ public class AdminDAO {
 				System.out.println("등록 실패");
 		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			try {
 				ps.close();
 			} catch (SQLException e) {

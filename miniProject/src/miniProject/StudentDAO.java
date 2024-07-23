@@ -12,22 +12,35 @@ public class StudentDAO {
 	public StudentVO loginStudent() {
 		System.out.println("학생 로그인 메뉴");
 
-		System.out.print("아이디 입력>>");
-		String sid = ConnManager.getScanner().next();
+		String sid;
 
-		// TODO 아이디 제약조건. 추후 보충하거나 메소드로 뺄 것.
-		if (sid == null || sid.length() == 0) {
+		ConnManager.getScanner().nextLine();
+		while (true) {
+			System.out.print("아이디 입력>>");
+			sid = ConnManager.getScanner().nextLine();
+			sid = sid.replace(" ", "");
+
+			System.out.println("입력된 sid: " + sid);
+
+			if (!idCheck(sid))
+				break;
+
 			System.out.println("아이디 입력 오류");
-			return null;
 		}
+		
+		String spw;
 
-		System.out.print("비번 입력>>");
-		String spw = ConnManager.getScanner().next();
+		while (true) {
+			System.out.print("비번 입력>>");
+			spw = ConnManager.getScanner().nextLine();
+			spw = spw.replace(" ", "");
 
-		// TODO 비밀번호 제약조건. 추후 보충하거나 메소드로 뺄 것.
-		if (spw == null || spw.length() == 0) {
+			System.out.println("입력된 spw: " + spw);
+
+			if (!passwordCheck(spw))
+				break;
+
 			System.out.println("비밀번호 입력 오류");
-			return null;
 		}
 
 		try {
@@ -38,6 +51,57 @@ public class StudentDAO {
 
 		return null;
 	}
+
+	// 아이디 대소문자, 길이, 빈 문자열 등 제약조건 검사
+	public boolean idCheck(String input) {
+//		System.out.println(input);
+
+		for (int i = 0; i < input.length(); i++) {
+			int asciiCode = (int) input.charAt(i);
+
+			if (asciiCode < 48) {
+				System.out.println("특수문자는 입력할 수 없습니다.");
+				return true;
+			}
+			if (asciiCode > 58 && asciiCode < 64) {
+				System.out.println("특수문자는 입력할 수 없습니다.");
+				return true;
+			}
+
+			if (asciiCode > 90 && asciiCode < 97) {
+				System.out.println("특수문자는 입력할 수 없습니다.");
+				return true;
+			}
+
+			if (asciiCode > 122) {
+				System.out.println("지정된 문자 이외의 문자는 입력할 수 없습니다.");
+				return true;
+			}
+		}
+
+		if (input.length() > 20) {
+			System.out.println("20자 이내로 작성해주세요.");
+			return true;
+		}
+		if (input.length() == 0) {
+			System.out.println("아이디를 입력해주세요.");
+			return true;
+		}
+		return false;
+	}
+
+	// 비밀번호 대소문자, 길이, 빈 문자열 등 제약조건 검사
+	public boolean passwordCheck(String input) {
+		if (input.length() > 20) {
+			System.out.println("20자 이내로 작성해주세요.");
+			return true;
+		}
+		if (input == "") {
+			System.out.println("아이디를 입력해주세요.");
+			return true;
+		}
+		return false;
+	};
 
 	/** 로그인 기능 */
 	private StudentVO loginStudent(String sid, String spw) throws SQLException {
@@ -373,7 +437,7 @@ public class StudentDAO {
 		}
 	}
 
-	public void joinStudent(String sid, String spw, int sno, String snm) {
+	private void joinStudent(String sid, String spw, int sno, String snm) {
 		String sql = "update student set sid = ?, spw = ?, slms = 'Y' where sno = ? and snm = ? and slms = 'N'";
 		PreparedStatement ps = null;
 

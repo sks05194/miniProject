@@ -40,6 +40,11 @@ public class MiniProjectMain {
 						break;
 					}
 
+					if(!admin.getAps()) {
+						System.out.println("아직 권한이 없습니다.");
+						break;
+					}
+
 					// 관리자 메뉴
 					System.out.println(admin.getAnm() + "님 환영합니다.");
 
